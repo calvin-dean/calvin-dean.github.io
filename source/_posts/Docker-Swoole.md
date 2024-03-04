@@ -85,21 +85,23 @@ RUN set -ex \
         --enable-mysqlnd \
         --enable-openssl \
         --enable-sockets --enable-swoole-curl --enable-swoole-json \
-    &&mkdir -p /var/log/supervisor \
-    &&rm -rf /var/lib/apt/lists/* \
-            $HOME/.composer/*-old.phar \
-            /usr/bin/qemu-*-static\
+    && mkdir -p /var/log/supervisor \
     && pecl update-channels \
     && pecl install redis-stable \
     && pecl install pecl/propro \
-    && docker-php-ext-enable propro \
-    && docker-php-ext-enable raphf \
     && docker-php-ext-install bcmath \
+    && docker-php-ext-enable propro \
+    && docker-php-ext-enable redis \
+    && docker-php-ext-enable raphf \
     && docker-php-ext-enable bcmath \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-enable pdo_mysql \
     #如果不需要swoole-loader下一行可删除
-    && docker-php-ext-enable swoole_loader74
+    && docker-php-ext-enable swoole_loader74 \
+    
+    &&rm -rf /var/lib/apt/lists/* \
+       $HOME/.composer/*-old.phar \
+       /usr/bin/qemu-*-static
     
 ENTRYPOINT ["/entrypoint.sh"]
 CMD []
